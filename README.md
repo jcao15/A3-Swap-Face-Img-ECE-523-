@@ -1,30 +1,26 @@
-See the [requirements in requirements.md](requirements.md) or on Canvas. 
+# FaceSwap
+I'm giving away this app to the open source community. In total, I've spent roughly six months developing this app and has drawn the conclusion that I do not have time to finish and publish it. 
 
-When you are ready, edit this file with the following info: 
+What made me not publish it is that noticed that different Android phones handles the photos differently regarding rotation. Which made the algorithms not working on some phones. Facepalm.
 
-# A3: BlurSwap My Face! 
-(Your Name Here)
-
-## Overview
-
-I built a thing that does something. But tell me what you built! 
-
-## Using the app 
-
-Tell me anything I need to know about running the app. 
-
-## Walkthrough
-
-Include some screenshots and information. Put the screenshots in the [imgs](imgs) directory, and include them in this readme like this: 
-
-![Sample Screenshot](imgs/screenshot.png?raw=tru)
-
-Or use html to resize it: 
-
-<img src="imgs/screenshot.png" width="50">
-
-## Reflection/Summary
-
-Summary of why you chose this project, what you learned or found surprising, what you found challenging or unexpected. You might include something you didn't finish or polish or would like to do different in the future. 
+**Warning, not tested on all processor architectures. The app has mainly been tested on Google Nexus 5x, some exotic Huawei, One plus, and the built in emulator in Android Studio.**
 
 
+## Source of inspiration
+I started developing this app when I read about Face Swapping in this blog post.
+
+http://www.learnopencv.com/face-swap-using-opencv-c-python/
+ 
+The algorithms are in OpenCV C++, which complicates build processes. 
+
+
+### App features
+* Swap faces of two selfies. Pick two photos and swap! (Use two first tabs)
+* Swap faces of people in the same photo. (Use third tab)
+
+### Swap examples
+#### Swap example 1
+![Screenshot](./images/fs1.png)
+
+#### Swap example 2
+![Screenshot](./images/fs2.png)
