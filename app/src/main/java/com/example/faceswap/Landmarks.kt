@@ -7,11 +7,7 @@ import com.google.mlkit.vision.face.FaceLandmark
 import kotlin.math.cos
 import kotlin.math.sin
 
-/**
- * Landmarks class for handling landmarks.
- *
- * @author alex011235
- */
+
 class Landmarks {
 
     companion object {

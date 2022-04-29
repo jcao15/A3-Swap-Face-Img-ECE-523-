@@ -7,4 +7,8 @@
     <string name="image2_for_faces">Image2 for faces</string>
     <string name="swap">Swap</string>
     <string name="undo">undo</string>
+    <string name="select_image1">Select Image1</string>
+    <string name="select_image2">Select Image2</string>
+    <string name="uwImage">uwImg</string>
+    <string name="blur">Blur</string>
 </resources>
