@@ -5,4 +5,6 @@
     <string name="image1_for_faces">Image1 for faces</string>
     <string name="action_button">Action button.</string>
     <string name="image2_for_faces">Image2 for faces</string>
+    <string name="swap">Swap</string>
+    <string name="undo">undo</string>
 </resources>

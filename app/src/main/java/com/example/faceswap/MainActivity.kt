@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var imageView1: ImageView
     private lateinit var imageView2: ImageView
-    private lateinit var button: FloatingActionButton
+    private lateinit var swapBt: Button
     private lateinit var undoBt: Button
 
     private lateinit var faces1: List<Face>
@@ -64,9 +64,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val tabs = findViewById<TabLayout>(R.id.tabLayout)
-        button = findViewById(R.id.fab)
+        swapBt = findViewById(R.id.swapBt)
         undoBt = findViewById(R.id.undoBt)
-        button.isEnabled = false
+        swapBt.isEnabled = false
         imageView1 = findViewById(R.id.imageView1)
         imageView2 = findViewById(R.id.imageView2)
 
@@ -134,7 +134,7 @@ class MainActivity : AppCompatActivity() {
                 hasSwapped = false;
             }
         }
-        button.setOnClickListener {
+        swapBt.setOnClickListener {
             Log.d(tag, "Action button clicked.")
 
             if (okToSwap) {
@@ -167,7 +167,7 @@ class MainActivity : AppCompatActivity() {
 
         if (resultCode == RESULT_OK && requestCode == pickImage) {
 
-            button.isEnabled = false
+            swapBt.isEnabled = false
 
             if (selectedTab == face1Tab) {
                 imageUriFace1 = data?.data
@@ -220,7 +220,7 @@ class MainActivity : AppCompatActivity() {
                             }
 
                             okToSwap = face1Done && face2Done
-                            button.isEnabled = okToSwap
+                            swapBt.isEnabled = okToSwap
                         }
                 }
 
