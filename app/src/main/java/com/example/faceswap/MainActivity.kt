@@ -71,6 +71,10 @@ class MainActivity : AppCompatActivity() {
         imageView1 = findViewById(R.id.imageView1)
         imageView2 = findViewById(R.id.imageView2)
 
+        savedInstanceState?.let {
+            imageUriFace1 = it.getParcelable(KEY_IMAGE_URI_1)
+            imageUriFace2 = it.getParcelable(KEY_IMAGE_URI_2)
+        }
         image1Bt.setOnClickListener {
             val gallery =
                 Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
@@ -226,5 +230,16 @@ class MainActivity : AppCompatActivity() {
 //                }
 //            })
 //    }
+    public override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        with(outState) { putParcelable(KEY_IMAGE_URI_1, imageUriFace1)
+            putParcelable(KEY_IMAGE_URI_2, imageUriFace2)
+        }
+    }
+    companion object {
+        private const val KEY_IMAGE_URI_1 = "123"
+        private const val KEY_IMAGE_URI_2 = "456"
+    }
+
 
 }
