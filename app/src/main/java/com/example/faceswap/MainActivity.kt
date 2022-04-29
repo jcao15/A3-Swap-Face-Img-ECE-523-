@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.widget.Button
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
@@ -43,8 +44,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var bitmap1Swapped: Bitmap
     private lateinit var bitmap2Swapped: Bitmap
 
-    private lateinit var imageView: ImageView
+    private lateinit var imageView1: ImageView
+    private lateinit var imageView2: ImageView
     private lateinit var button: FloatingActionButton
+    private lateinit var undoBt: Button
 
     private lateinit var faces1: List<Face>
     private lateinit var faces2: List<Face>
@@ -62,35 +65,40 @@ class MainActivity : AppCompatActivity() {
 
         val tabs = findViewById<TabLayout>(R.id.tabLayout)
         button = findViewById(R.id.fab)
+        undoBt = findViewById(R.id.undoBt)
         button.isEnabled = false
-        imageView = findViewById(R.id.imageView)
+        imageView1 = findViewById(R.id.imageView1)
+        imageView2 = findViewById(R.id.imageView2)
 
         // Change tabs
 
         tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
+                // Open gallery for image selection
+                val gallery =
+                    Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+                startActivityForResult(gallery, pickImage)
 
                 if (tab != null) {
                     Log.d(tag, "Tab ${tab.position} selected")
 
                     selectedTab = tab.position
 
+
                     if (hasSwapped) {
                         // Swapped, used swapped bitmaps instead of source.
-                        if (tab.position == face1Tab) {
-                            imageView.setImageBitmap(bitmap1Swapped)
-                        }
-                        if (tab.position == face2Tab) {
-                            imageView.setImageBitmap(bitmap2Swapped)
-                        }
+                        imageView1.setImageBitmap(bitmap1Swapped)
+
+                        imageView1.setImageBitmap(bitmap2Swapped)
+
                     } else {
                         // Has not swapped, use sources.
-                        if (tab.position == face1Tab) {
-                            imageView.setImageURI(imageUriFace1)
-                        }
-                        if (tab.position == face2Tab) {
-                            imageView.setImageURI(imageUriFace2)
-                        }
+
+                        imageView2.setImageURI(imageUriFace1)
+
+
+                        imageView2.setImageURI(imageUriFace2)
+
                     }
                 }
             }
@@ -104,17 +112,28 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        // Open gallery for image selection
-
-        imageView.setOnClickListener {
-            Log.d(tag, "Click on image view.")
-            val gallery =
-                Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-            startActivityForResult(gallery, pickImage)
-        }
 
         // Click listener for action button, should result in face swap.
 
+        undoBt.setOnClickListener {
+            Log.d(tag, "Undo clicked.")
+            if (hasSwapped) {
+                val landmarksForFaces1 = Landmarks.arrangeLandmarksForFaces(faces1)
+                val landmarksForFaces2 = Landmarks.arrangeLandmarksForFaces(faces2)
+
+                bitmap1Swapped =
+                    Swap.faceSwapAll(bitmap2, bitmap1, landmarksForFaces2, landmarksForFaces1)
+
+                bitmap2Swapped =
+                    Swap.faceSwapAll(bitmap1, bitmap2, landmarksForFaces1, landmarksForFaces2)
+
+                imageView1.setImageBitmap(bitmap1)
+
+                imageView2.setImageBitmap(bitmap2)
+
+                hasSwapped = false;
+            }
+        }
         button.setOnClickListener {
             Log.d(tag, "Action button clicked.")
 
@@ -129,18 +148,14 @@ class MainActivity : AppCompatActivity() {
                 bitmap1Swapped =
                     Swap.faceSwapAll(bitmap2, bitmap1, landmarksForFaces2, landmarksForFaces1)
 
+                imageView1.setImageBitmap(bitmap1Swapped)
 
-                if (selectedTab == face1Tab) {
-                    imageView.setImageBitmap(bitmap1Swapped)
-                }
-
-                if (selectedTab == face2Tab) {
-                    imageView.setImageBitmap(bitmap2Swapped)
-                }
+                imageView2.setImageBitmap(bitmap2Swapped)
 
                 hasSwapped = true
 
-                // imageUriFace1?.let { it1 -> drawLandmarks(it1, landmarksForFaces1) }
+//                imageUriFace1?.let { it1 -> drawLandmarks(it1, landmarksForFaces1) }
+//                imageUriFace2?.let { it2 -> drawLandmarks(it2, landmarksForFaces2) }
             }
         }
     }
@@ -156,12 +171,12 @@ class MainActivity : AppCompatActivity() {
 
             if (selectedTab == face1Tab) {
                 imageUriFace1 = data?.data
-                imageView.setImageURI(imageUriFace1)
+                imageView1.setImageURI(imageUriFace1)
                 imageUriFace1?.let { prepareImage(it, 0) }
             }
             if (selectedTab == face2Tab) {
                 imageUriFace2 = data?.data
-                imageView.setImageURI(imageUriFace2)
+                imageView2.setImageURI(imageUriFace2)
                 imageUriFace2?.let { prepareImage(it, 1) }
             }
         }
@@ -220,23 +235,23 @@ class MainActivity : AppCompatActivity() {
      * @param uri Image source.
      * @param landmarksForFaces All landmarks extracted in source image.
      */
-    private fun drawLandmarks(uri: Uri, landmarksForFaces: ArrayList<ArrayList<PointF>>) {
-        Log.v(tag, "Draw landmarks for faces.")
-
-        Glide.with(this)
-            .asBitmap()
-            .load(uri)
-            .into(object : CustomTarget<Bitmap>(desiredWidth, desiredHeight) {
-                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                    val bitmapWithLandmarks =
-                        ImageUtils.drawLandmarksOnBitmap(resource, landmarksForFaces)
-
-                    imageView.setImageBitmap(bitmapWithLandmarks)
-                }
-
-                override fun onLoadCleared(placeholder: Drawable?) {
-                }
-            })
-    }
+//    private fun drawLandmarks(uri: Uri, landmarksForFaces: ArrayList<ArrayList<PointF>>) {
+//        Log.v(tag, "Draw landmarks for faces.")
+//
+//        Glide.with(this)
+//            .asBitmap()
+//            .load(uri)
+//            .into(object : CustomTarget<Bitmap>(desiredWidth, desiredHeight) {
+//                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+//                    val bitmapWithLandmarks =
+//                        ImageUtils.drawLandmarksOnBitmap(resource, landmarksForFaces)
+//
+//                    imageView1.setImageBitmap(bitmapWithLandmarks)
+//                }
+//
+//                override fun onLoadCleared(placeholder: Drawable?) {
+//                }
+//            })
+//    }
 
 }

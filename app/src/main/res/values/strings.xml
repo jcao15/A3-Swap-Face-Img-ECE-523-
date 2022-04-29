@@ -2,6 +2,7 @@
     <string name="app_name">FaceSwap</string>
     <string name="face_1">Face 1</string>
     <string name="face_2">Face 2</string>
-    <string name="image_for_faces">Image for faces</string>
+    <string name="image1_for_faces">Image1 for faces</string>
     <string name="action_button">Action button.</string>
+    <string name="image2_for_faces">Image2 for faces</string>
 </resources>
