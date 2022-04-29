@@ -2,29 +2,25 @@ package com.example.faceswap
 
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.PointF
+import android.graphics.ImageDecoder
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.tabs.TabLayout
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.face.Face
 
 
-/**
- * Main activity for FaceSwap.
- *
- * @author alex011235
- */
 class MainActivity : AppCompatActivity() {
 
     private val tag = "MainActivity"
@@ -49,6 +45,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var swapBt: Button
     private lateinit var undoBt: Button
 
+    private lateinit var image1Bt: Button
+    private lateinit var image2Bt: Button
+
     private lateinit var faces1: List<Face>
     private lateinit var faces2: List<Face>
     private val faceDetectorEngine = FaceDetectorEngine()
@@ -63,55 +62,29 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val tabs = findViewById<TabLayout>(R.id.tabLayout)
+        image1Bt = findViewById(R.id.image1)
+        image2Bt = findViewById(R.id.image2)
+
         swapBt = findViewById(R.id.swapBt)
         undoBt = findViewById(R.id.undoBt)
         swapBt.isEnabled = false
         imageView1 = findViewById(R.id.imageView1)
         imageView2 = findViewById(R.id.imageView2)
 
-        // Change tabs
-
-        tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                // Open gallery for image selection
-                val gallery =
-                    Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-                startActivityForResult(gallery, pickImage)
-
-                if (tab != null) {
-                    Log.d(tag, "Tab ${tab.position} selected")
-
-                    selectedTab = tab.position
-
-
-                    if (hasSwapped) {
-                        // Swapped, used swapped bitmaps instead of source.
-                        imageView1.setImageBitmap(bitmap1Swapped)
-
-                        imageView1.setImageBitmap(bitmap2Swapped)
-
-                    } else {
-                        // Has not swapped, use sources.
-
-                        imageView2.setImageURI(imageUriFace1)
-
-
-                        imageView2.setImageURI(imageUriFace2)
-
-                    }
-                }
-            }
-
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-                Log.d(tag, "onTabReselected not in use.")
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-                Log.d(tag, "onTabUnselected not in use.")
-            }
-        })
-
+        image1Bt.setOnClickListener {
+            val gallery =
+                Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+            startActivityForResult(gallery, pickImage)
+            Log.d(tag, "Open gallery to select image 1.")
+            selectedTab = face1Tab
+        }
+        image2Bt.setOnClickListener {
+            val gallery =
+                Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+            startActivityForResult(gallery, pickImage)
+            Log.d(tag, "Open gallery to select image 2.")
+            selectedTab = face2Tab
+        }
 
         // Click listener for action button, should result in face swap.
 

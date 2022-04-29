@@ -11,11 +11,7 @@ import org.opencv.imgproc.Subdiv2D
 import org.opencv.photo.Photo
 import kotlin.math.abs
 
-/**
- * Class for swapping faces in images.
- *
- * @author alex011235
- */
+
 class Swap {
 
     companion object {

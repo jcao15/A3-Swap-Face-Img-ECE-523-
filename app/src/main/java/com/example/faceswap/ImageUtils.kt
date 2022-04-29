@@ -4,11 +4,6 @@ import android.graphics.*
 import android.util.Log
 
 
-/**
- * Utilities for working with images.
- *
- * @author alex011235
- */
 class ImageUtils {
 
     companion object {
