@@ -15,7 +15,9 @@ User can also click the "undo" button to undo the face swap action.
 
 ## Walkthrough
 
-![Sample Screenshot](imgs/screenshot.png?raw=tru)
+![Sample Screenshot](imgs/1.png?raw=tru)
+![Sample Screenshot](imgs/2.png?raw=tru)
+![Sample Screenshot](imgs/2.png?raw=tru)
 
 Or use html to resize it: 
 
