@@ -31,4 +31,6 @@ To Do:
 - Integration of Blur Face function.
 - landscape xml layout design.
 
+Reference:
+https://www.thefaceparismanagement.com/
 
